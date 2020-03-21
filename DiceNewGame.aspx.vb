@@ -63,6 +63,7 @@
         Dim intNewPlayerID As Integer
         Dim intAutoTurnSeqNum As Integer = 0
         Dim intPlayerCnt As Integer = 0
+        Dim intFirstPlayerNdx As Integer
 
         cblist = CType(FindControl("playerList"), CheckBoxList)
         intLastNdx = cblist.Items.Count - 1
@@ -133,6 +134,9 @@
         S = New SharedRoutines(gintNewGameID)
         S.SetUpCasinos()
         ''
+        Dim R As New Random
+        intFirstPlayerNdx = R.Next(1, intPlayerCnt)
+
         Try
             DBcon.ConnectionString = CS.MainConnection
             DBcon.Open()
@@ -141,6 +145,7 @@
             DBcmd.CommandText = "[Dice].[MakeGameActive]"
             DBcmd.Parameters.Clear()
             DBcmd.Parameters.Add(New SqlClient.SqlParameter("@GameNum", gintNewGameID))
+            DBcmd.Parameters.Add(New SqlClient.SqlParameter("@FirstPlayerNdx", intFirstPlayerNdx))
             Dim intRetParam As New SqlClient.SqlParameter("RETURN_VALUE", SqlDbType.Int)
             intRetParam.Direction = ParameterDirection.ReturnValue
             DBcmd.Parameters.Add(intRetParam)

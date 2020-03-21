@@ -975,8 +975,14 @@
     End Sub
 
     Sub InitializePlayerDice()
+
         Dim intNdx As Integer
         Dim intColorToUse As Integer
+        Dim intHowMany As Integer
+        Dim intPlayerCount As Integer
+
+        intPlayerCount = gds.Tables("PlayerDetails").Rows.Count
+
         ' Set up all the initial dice, and flag as created
         ' Get the color of dice to use for current user
         intColorToUse = GetDiceColorFromID(gintPlayerNum)
@@ -985,8 +991,12 @@
         For intNdx = 1 To 8
             CreateDieForUser(intColorToUse)
         Next
-        ' two white dice
-        For intNdx = 1 To 2
+
+        intHowMany = 2
+        If (intPlayerCount = 2) Then
+            intHowMany = 4
+        End If
+        For intNdx = 1 To intHowMany
             CreateDieForUser(-1)
         Next
         '
